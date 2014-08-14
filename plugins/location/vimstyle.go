@@ -1,26 +1,8 @@
 package location
 
-import (
-	"os"
-	"os/user"
-	"strings"
-)
+import "strings"
 
 type VimStyle struct{}
-
-func getWorkingDir() (string, error) {
-	workingDirectory, err := os.Getwd()
-	if nil != err {
-		return "", err
-	}
-
-	user, err := user.Current()
-	if nil != err {
-		return "", err
-	}
-
-	return strings.Replace(workingDirectory, user.HomeDir, "~", 1), nil
-}
 
 func splitDirectory(directory string) []string {
 	path := []string{}
