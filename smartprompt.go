@@ -1,27 +1,58 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+	"os"
+	"strings"
+)
 import (
 	. "github.com/fholiveira/smartprompt/plugins"
 	"github.com/fholiveira/smartprompt/plugins/location"
 )
 
-type Plugin interface {
-	Prompt() (string, error)
+func mapPlugins() map[string]Plugin {
+	return map[string]Plugin{
+		"{user}":              User{},
+		"{host}":              Host{},
+		"{git}":               Git{},
+		"{location}":          location.Default{},
+		"{location:vimstyle}": location.VimStyle{},
+	}
+}
+
+func loadPromptPattern() (string, error) {
+	args := os.Args[1:]
+
+	if len(args) != 1 {
+		return "", errors.New("Invalid arguments")
+	}
+
+	return args[0], nil
+}
+
+func createPrompt(pattern string, plugins map[string]Plugin) string {
+	for key, plugin := range plugins {
+		if !strings.Contains(pattern, key) {
+			continue
+		}
+
+		prompt, err := plugin.Prompt()
+		if err == nil {
+			pattern = strings.Replace(pattern, key, prompt, -1)
+		}
+
+	}
+
+	return pattern
 }
 
 func main() {
-	dict := map[string]Plugin{
-		"user":              User{},
-		"git":               Git{},
-		"location":          location.Default{},
-		"location:vimstyle": location.VimStyle{},
+	promptPattern, err := loadPromptPattern()
+	if nil != err {
+		return
 	}
 
-	for key, plugin := range dict {
-		prompt, err := plugin.Prompt()
-		if err == nil {
-			fmt.Println(key, ":", prompt)
-		}
-	}
+	prompt := createPrompt(promptPattern, mapPlugins())
+	fmt.Println(prompt)
 }

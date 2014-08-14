@@ -1,13 +1,17 @@
 package plugins
 
-import "github.com/libgit2/git2go"
+import (
+	"fmt"
+
+	"github.com/libgit2/git2go"
+)
 import "os"
 
 type Git struct{}
 
 func getBranchName(repo *git.Repository) (string, error) {
 	reference, err := repo.Head()
-	if err != nil {
+	if nil != err {
 		return "", err
 	}
 
@@ -30,14 +34,21 @@ func getRepository() (*git.Repository, error) {
 
 func (git Git) Prompt() (string, error) {
 	repo, err := getRepository()
-	if err != nil {
+	if nil != err {
 		return "", err
 	}
 
 	branchName, err := getBranchName(repo)
-	if err != nil {
+	if nil != err {
 		return "", err
 	}
 
-	return branchName, nil
+	index, err := repo.Index()
+	if nil != err {
+		return "", err
+	}
+
+	fmt.Println(index.HasConflicts())
+
+	return "[" + branchName + "]", nil
 }
