@@ -1,10 +1,7 @@
 package plugins
 
-import (
-	"fmt"
+import "github.com/libgit2/git2go"
 
-	"github.com/libgit2/git2go"
-)
 import "os"
 
 type Git struct{}
@@ -42,13 +39,6 @@ func (git Git) Prompt() (string, error) {
 	if nil != err {
 		return "", err
 	}
-
-	index, err := repo.Index()
-	if nil != err {
-		return "", err
-	}
-
-	fmt.Println(index.HasConflicts())
 
 	return "[" + branchName + "]", nil
 }
