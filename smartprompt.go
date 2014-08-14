@@ -22,6 +22,7 @@ func main() {
 
 	prompt, _ = PluginParser{}.Parse(prompt)
 	prompt, _ = ColorParser{}.Parse(prompt)
+	prompt, _ = WhiteSpacesParser{}.Parse(prompt)
 
 	fmt.Println(prompt)
 }
