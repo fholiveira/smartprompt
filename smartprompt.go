@@ -1,31 +1,27 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
 	. "github.com/fholiveira/smartprompt/parsers"
 )
 
-func loadPromptPattern() (string, error) {
+func loadPromptPattern() string {
 	args := os.Args[1:]
 
 	if len(args) != 1 {
-		return "", errors.New("Invalid arguments")
+		return "{GREEN:bold}{user}@{host} {BLUE:bold}{location:vimstyle} {git} {CYAN:bold}{prompt:symbol} {TEXT:reset}"
 	}
 
-	return args[0], nil
+	return args[0]
 }
 
 func main() {
-	promptPattern, err := loadPromptPattern()
-	if nil != err {
-		return
-	}
+	prompt := loadPromptPattern()
 
-	prompt, _ := ColorParser{}.Parse(promptPattern)
 	prompt, _ = PluginParser{}.Parse(prompt)
+	prompt, _ = ColorParser{}.Parse(prompt)
 
 	fmt.Println(prompt)
 }
