@@ -1,7 +1,6 @@
 package location
 
 import (
-	"fmt"
 	"os"
 	"os/user"
 	"strings"
@@ -14,7 +13,7 @@ func getWorkingDir() (string, error) {
 	if nil != err {
 		return "", err
 	}
-	fmt.Println(user)
+
 	user, err := user.Current()
 	if nil != err {
 		return "", err

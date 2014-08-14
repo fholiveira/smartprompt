@@ -14,6 +14,7 @@ func mapPlugins() map[string]Plugin {
 		"{user}":              User{},
 		"{host}":              Host{},
 		"{git}":               Git{},
+		"{prompt:symbol}":     PromptSymbol{},
 		"{location}":          location.Default{},
 		"{location:vimstyle}": location.VimStyle{},
 	}
