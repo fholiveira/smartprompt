@@ -21,13 +21,16 @@ func mapPlugins() map[string]Plugin {
 }
 
 func (parser PluginParser) Parse(prompt string) (string, error) {
-	for key, plugin := range mapPlugins() {
-		if !strings.Contains(prompt, key) {
+	plugins := mapPlugins()
+
+	for _, token := range getTokens(prompt) {
+		plugin, isPlugin := plugins[token]
+		if !isPlugin {
 			continue
 		}
 
 		pluginPrompt, _ := plugin.Prompt()
-		prompt = strings.Replace(prompt, key, pluginPrompt, -1)
+		prompt = strings.Replace(prompt, token, pluginPrompt, -1)
 	}
 
 	return prompt, nil

@@ -43,10 +43,14 @@ func mapColors() map[string]string {
 }
 
 func (parser ColorParser) Parse(prompt string) (string, error) {
-	for name, code := range mapColors() {
-		if strings.Contains(prompt, name) {
-			prompt = strings.Replace(prompt, name, code, -1)
+	colors := mapColors()
+
+	for _, token := range getTokens(prompt) {
+		color, isColor := colors[token]
+		if isColor {
+			prompt = strings.Replace(prompt, token, color, -1)
 		}
+
 	}
 
 	return prompt, nil
