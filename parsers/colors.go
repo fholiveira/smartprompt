@@ -40,7 +40,7 @@ func mapColors() map[string]string {
 	}
 }
 
-func (parser ColorParser) Parse(prompt PromptLine) (PromptLine, error) {
+func (parser ColorParser) Parse(prompt PromptLine) (PromptLine, []error) {
 	colors := mapColors()
 
 	for _, token := range prompt.Tokens() {

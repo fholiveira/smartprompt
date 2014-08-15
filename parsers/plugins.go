@@ -24,9 +24,10 @@ func mapPlugins() map[string]Plugin {
 	}
 }
 
-func (parser PluginParser) Parse(prompt PromptLine) (PromptLine, error) {
+func (parser PluginParser) Parse(prompt PromptLine) (PromptLine, []error) {
 	plugins := mapPlugins()
 
+	errors := make([]error, 0)
 	for _, token := range prompt.Tokens() {
 		plugin, isPlugin := plugins[token.Name()]
 		if !isPlugin {
@@ -35,10 +36,14 @@ func (parser PluginParser) Parse(prompt PromptLine) (PromptLine, error) {
 
 		pluginPrompt, err := plugin.Prompt(token.Parameter())
 		if nil != err {
-			return PromptLine{}, err
+			errors = append(errors, err)
 		}
 
 		prompt.Apply(token, pluginPrompt)
+	}
+
+	if len(errors) > 0 {
+		return PromptLine{prompt.Text}, errors
 	}
 
 	return PromptLine{prompt.Text}, nil

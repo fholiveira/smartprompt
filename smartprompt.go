@@ -14,13 +14,15 @@ func parsePrompt(pattern string, debug bool) string {
 		WhiteSpacesParser{},
 	}
 
-	var err error
+	var errors []error
 	prompt := PromptLine{pattern}
 
 	for _, parser := range parsers {
-		prompt, err = parser.Parse(prompt)
-		if debug && nil != err {
-			fmt.Println(err)
+		prompt, errors = parser.Parse(prompt)
+		if debug && nil != errors {
+			for _, err := range errors {
+				fmt.Println(err)
+			}
 		}
 	}
 
