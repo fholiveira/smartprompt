@@ -4,7 +4,9 @@ import "regexp"
 
 type WhiteSpacesParser struct{}
 
-func (parser WhiteSpacesParser) Parse(prompt string) (string, error) {
+func (parser WhiteSpacesParser) Parse(prompt PromptLine) (PromptLine, error) {
 	regex := regexp.MustCompile(" {2,}")
-	return regex.ReplaceAllString(prompt, " "), nil
+	prompt.Text = regex.ReplaceAllString(prompt.Text, " ")
+
+	return PromptLine{prompt.Text}, nil
 }

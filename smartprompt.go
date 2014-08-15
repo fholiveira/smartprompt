@@ -15,14 +15,16 @@ func parsePrompt(pattern string, debug bool) string {
 	}
 
 	var err error
+	prompt := PromptLine{pattern}
+
 	for _, parser := range parsers {
-		pattern, err = parser.Parse(pattern)
+		prompt, err = parser.Parse(prompt)
 		if debug && nil != err {
 			fmt.Println(err)
 		}
 	}
 
-	return pattern
+	return prompt.Text
 }
 
 func main() {

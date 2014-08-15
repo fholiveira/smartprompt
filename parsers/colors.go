@@ -1,7 +1,5 @@
 package parsers
 
-import "strings"
-
 type ColorParser struct{}
 
 func mapColors() map[string]string {
@@ -42,16 +40,15 @@ func mapColors() map[string]string {
 	}
 }
 
-func (parser ColorParser) Parse(prompt string) (string, error) {
+func (parser ColorParser) Parse(prompt PromptLine) (PromptLine, error) {
 	colors := mapColors()
 
-	for _, token := range getTokens(prompt) {
+	for _, token := range prompt.Tokens() {
 		color, isColor := colors[token]
 		if isColor {
-			prompt = strings.Replace(prompt, "{"+token+"}", color, -1)
+			prompt.Apply(token, color)
 		}
-
 	}
 
-	return prompt, nil
+	return PromptLine{prompt.Text}, nil
 }

@@ -1,8 +1,6 @@
 package parsers
 
 import (
-	"strings"
-
 	. "github.com/fholiveira/smartprompt/plugins"
 	"github.com/fholiveira/smartprompt/plugins/location"
 	"github.com/fholiveira/smartprompt/plugins/shell"
@@ -26,10 +24,10 @@ func mapPlugins() map[string]Plugin {
 	}
 }
 
-func (parser PluginParser) Parse(prompt string) (string, error) {
+func (parser PluginParser) Parse(prompt PromptLine) (PromptLine, error) {
 	plugins := mapPlugins()
 
-	for _, token := range getTokens(prompt) {
+	for _, token := range prompt.Tokens() {
 		plugin, isPlugin := plugins[token]
 		if !isPlugin {
 			continue
@@ -37,11 +35,11 @@ func (parser PluginParser) Parse(prompt string) (string, error) {
 
 		pluginPrompt, err := plugin.Prompt()
 		if nil != err {
-			return "", err
+			return PromptLine{}, err
 		}
 
-		prompt = strings.Replace(prompt, "{"+token+"}", pluginPrompt, -1)
+		prompt.Apply(token, pluginPrompt)
 	}
 
-	return prompt, nil
+	return PromptLine{prompt.Text}, nil
 }

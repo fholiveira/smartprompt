@@ -1,14 +1,21 @@
 package parsers
 
-import "regexp"
+import (
+	"regexp"
+	"strings"
+)
 
-type Parser interface {
-	Parse(prompt string) (string, error)
+type PromptLine struct {
+	Text string
 }
 
-func getTokens(prompt string) []string {
+func (prompt *PromptLine) Apply(token, value string) {
+	prompt.Text = strings.Replace(prompt.Text, "{"+token+"}", value, -1)
+}
+
+func (prompt *PromptLine) Tokens() []string {
 	regex := regexp.MustCompile("{([^}]+)}")
-	matches := regex.FindAllStringSubmatch(prompt, -1)
+	matches := regex.FindAllStringSubmatch(prompt.Text, -1)
 
 	column := make([]string, 0)
 	for _, row := range matches {
@@ -16,4 +23,8 @@ func getTokens(prompt string) []string {
 	}
 
 	return column
+}
+
+type Parser interface {
+	Parse(prompt PromptLine) (PromptLine, error)
 }
