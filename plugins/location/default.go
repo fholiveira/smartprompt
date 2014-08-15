@@ -22,6 +22,6 @@ func getWorkingDir() (string, error) {
 	return strings.Replace(workingDirectory, user.HomeDir, "~", 1), nil
 }
 
-func (location Default) Prompt() (string, error) {
+func (location Default) Prompt(parameter string) (string, error) {
 	return getWorkingDir()
 }

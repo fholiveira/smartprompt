@@ -4,7 +4,7 @@ import "syscall"
 
 type PromptSymbol struct{}
 
-func (promptSymbol PromptSymbol) Prompt() (string, error) {
+func (promptSymbol PromptSymbol) Prompt(parameter string) (string, error) {
 	symbol := "$"
 
 	if syscall.Geteuid() == 0 {

@@ -33,7 +33,7 @@ func (parser PluginParser) Parse(prompt PromptLine) (PromptLine, error) {
 			continue
 		}
 
-		pluginPrompt, err := plugin.Prompt()
+		pluginPrompt, err := plugin.Prompt(token.Parameter())
 		if nil != err {
 			return PromptLine{}, err
 		}

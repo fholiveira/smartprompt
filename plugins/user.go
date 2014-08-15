@@ -2,6 +2,6 @@ package plugins
 
 type User struct{}
 
-func (user User) Prompt() (string, error) {
+func (user User) Prompt(parameter string) (string, error) {
 	return "\\u", nil
 }

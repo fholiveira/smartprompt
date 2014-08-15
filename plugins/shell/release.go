@@ -2,6 +2,6 @@ package shell
 
 type Release struct{}
 
-func (release Release) Prompt() (string, error) {
+func (release Release) Prompt(parameter string) (string, error) {
 	return "\\V", nil
 }

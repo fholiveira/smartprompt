@@ -31,7 +31,7 @@ func getRepository() (*git.Repository, error) {
 	return repo, nil
 }
 
-func (git Git) Prompt() (string, error) {
+func (git Git) Prompt(parameter string) (string, error) {
 	repo, err := getRepository()
 	if nil != err {
 		return "", nil
