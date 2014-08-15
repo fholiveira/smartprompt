@@ -35,7 +35,10 @@ func main() {
 }
 
 func usage() string {
-	return `Usage:
+	return `Smart Prompt
+A customizable prompt generator for your terminal emulator.
+
+Usage:
   smartprompt [--pattern=<pattern>] [-d | --debug]
   smartprompt -h | --help
   smartprompt --version

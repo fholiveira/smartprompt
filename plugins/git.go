@@ -1,8 +1,10 @@
 package plugins
 
-import "github.com/libgit2/git2go"
+import (
+	"os"
 
-import "os"
+	"github.com/libgit2/git2go"
+)
 
 type Git struct{}
 
@@ -32,7 +34,7 @@ func getRepository() (*git.Repository, error) {
 func (git Git) Prompt() (string, error) {
 	repo, err := getRepository()
 	if nil != err {
-		return "", err
+		return "", nil
 	}
 
 	branchName, err := getBranchName(repo)
@@ -40,5 +42,5 @@ func (git Git) Prompt() (string, error) {
 		return "", err
 	}
 
-	return "[" + branchName + "]", nil
+	return "{GREEN:bold}[" + branchName + "]", nil
 }

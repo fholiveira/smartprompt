@@ -29,7 +29,11 @@ func (parser PluginParser) Parse(prompt string) (string, error) {
 			continue
 		}
 
-		pluginPrompt, _ := plugin.Prompt()
+		pluginPrompt, err := plugin.Prompt()
+		if nil != err {
+			return "", err
+		}
+
 		prompt = strings.Replace(prompt, token, pluginPrompt, -1)
 	}
 
