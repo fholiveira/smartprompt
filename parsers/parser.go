@@ -8,5 +8,12 @@ type Parser interface {
 
 func getTokens(prompt string) []string {
 	regex := regexp.MustCompile("{([^}]+)}")
-	return regex.FindAllString(prompt, -1)
+	matches := regex.FindAllStringSubmatch(prompt, -1)
+
+	column := make([]string, 0)
+	for _, row := range matches {
+		column = append(column, row[1])
+	}
+
+	return column
 }
