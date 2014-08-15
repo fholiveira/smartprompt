@@ -5,6 +5,7 @@ import (
 
 	. "github.com/fholiveira/smartprompt/plugins"
 	"github.com/fholiveira/smartprompt/plugins/location"
+	"github.com/fholiveira/smartprompt/plugins/shell"
 )
 
 type PluginParser struct{}
@@ -16,6 +17,9 @@ func mapPlugins() map[string]Plugin {
 		"{git}":               Git{},
 		"{prompt:symbol}":     PromptSymbol{},
 		"{location}":          location.Default{},
+		"{shell}":             shell.Shell{},
+		"{shell:version}":     shell.Version{},
+		"{shell:release}":     shell.Release{},
 		"{location:vimstyle}": location.VimStyle{},
 	}
 }
