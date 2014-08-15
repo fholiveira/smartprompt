@@ -28,7 +28,7 @@ func (parser PluginParser) Parse(prompt PromptLine) (PromptLine, error) {
 	plugins := mapPlugins()
 
 	for _, token := range prompt.Tokens() {
-		plugin, isPlugin := plugins[token]
+		plugin, isPlugin := plugins[token.Name()]
 		if !isPlugin {
 			continue
 		}

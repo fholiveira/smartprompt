@@ -44,7 +44,7 @@ func (parser ColorParser) Parse(prompt PromptLine) (PromptLine, error) {
 	colors := mapColors()
 
 	for _, token := range prompt.Tokens() {
-		color, isColor := colors[token]
+		color, isColor := colors[token.Name()]
 		if isColor {
 			prompt.Apply(token, color)
 		}
