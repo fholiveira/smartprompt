@@ -14,6 +14,8 @@ func mapPlugins() map[string]Plugin {
 	return map[string]Plugin{
 		"{user}":              User{},
 		"{host}":              Host{},
+		"{dir}":               Directory{},
+		"{fqdn}":              FullQualifiedDomainName{},
 		"{git}":               Git{},
 		"{prompt:symbol}":     PromptSymbol{},
 		"{location}":          location.Default{},
