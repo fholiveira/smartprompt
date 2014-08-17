@@ -12,6 +12,7 @@ func mapPlugins() map[string]Plugin {
 	return map[string]Plugin{
 		"user":              User{},
 		"host":              Host{},
+		"time":              DateTime{},
 		"dir":               Directory{},
 		"fqdn":              FullQualifiedDomainName{},
 		"git":               Git{},
