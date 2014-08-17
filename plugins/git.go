@@ -3,7 +3,7 @@ package plugins
 import (
 	"os"
 
-	"github.com/libgit2/git2go"
+	"github.com/fholiveira/git2go"
 )
 
 type Git struct{}

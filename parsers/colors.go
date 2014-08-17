@@ -2,7 +2,7 @@ package parsers
 
 type ColorParser struct{}
 
-func mapColors() map[string]string {
+func (parser ColorParser) Colors() map[string]string {
 	return map[string]string{
 		"BLACK":             "\\e[0;30m",
 		"RED":               "\\e[0;31m",
@@ -41,7 +41,7 @@ func mapColors() map[string]string {
 }
 
 func (parser ColorParser) Parse(prompt PromptLine) (PromptLine, []error) {
-	colors := mapColors()
+	colors := parser.Colors()
 
 	for _, token := range prompt.Tokens() {
 		color, isColor := colors[token.Name()]

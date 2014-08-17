@@ -7,22 +7,28 @@ import (
 	. "github.com/fholiveira/smartprompt/parsers"
 )
 
-func parsePrompt(pattern string, debug bool) string {
-	parsers := []Parser{
+func getParsers() []Parser {
+	return []Parser{
 		PluginParser{},
 		ColorParser{},
 		WhiteSpacesParser{},
 	}
+}
 
+func print(errors []error) {
+	for _, err := range errors {
+		fmt.Println(err)
+	}
+}
+
+func parsePrompt(pattern string, debug bool) string {
 	var errors []error
 	prompt := PromptLine{pattern}
 
-	for _, parser := range parsers {
+	for _, parser := range getParsers() {
 		prompt, errors = parser.Parse(prompt)
 		if debug && nil != errors {
-			for _, err := range errors {
-				fmt.Println(err)
-			}
+			print(errors)
 		}
 	}
 

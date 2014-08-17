@@ -10,7 +10,8 @@ type PromptLine struct {
 }
 
 func (prompt *PromptLine) Apply(token Token, value string) {
-	prompt.Text = strings.Replace(prompt.Text, "{"+string(token)+"}", value, -1)
+	tokenKey := "{" + string(token) + "}"
+	prompt.Text = strings.Replace(prompt.Text, tokenKey, value, -1)
 }
 
 func (prompt PromptLine) Tokens() []Token {
