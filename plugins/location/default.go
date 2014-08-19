@@ -8,7 +8,7 @@ import (
 
 type Default struct{}
 
-func getWorkingDir() (string, error) {
+var getWorkingDir = func() (string, error) {
 	workingDirectory, err := os.Getwd()
 	if nil != err {
 		return "", err
