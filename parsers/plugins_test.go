@@ -6,31 +6,15 @@ import (
 
 	. "github.com/fholiveira/smartprompt/plugins"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
 
-type CommonPlugin struct{}
+type PluginMock struct{ mock.Mock }
 
-func (plugin CommonPlugin) Prompt(parameter string) (string, error) {
-	return "common_plugin_value", nil
-}
-
-type PluginWithParameter struct{}
-
-func (plugin PluginWithParameter) Prompt(parameter string) (string, error) {
-	return "p_value__" + parameter, nil
-}
-
-type PluginWithError1 struct{}
-
-func (plugin PluginWithError1) Prompt(parameter string) (string, error) {
-	return "", errors.New("Error 1")
-}
-
-type PluginWithError2 struct{}
-
-func (plugin PluginWithError2) Prompt(parameter string) (string, error) {
-	return "", errors.New("Error 2")
+func (plugin PluginMock) Prompt(parameter string) (string, error) {
+	args := plugin.Mock.Called(parameter)
+	return args.String(0), args.Error(1)
 }
 
 type PluginParserTestSuite struct {
@@ -41,12 +25,19 @@ type PluginParserTestSuite struct {
 func (suite *PluginParserTestSuite) SetupTest() {
 	suite.parser = PluginParser{}
 
+	common, parameter, error1, error2 := PluginMock{}, PluginMock{}, PluginMock{}, PluginMock{}
+
+	common.On("Prompt", "").Return("common_plugin_value", nil)
+	parameter.On("Prompt", "123").Return("p_value__123", nil)
+	error1.On("Prompt", "").Return("", errors.New("Error 1"))
+	error2.On("Prompt", "").Return("", errors.New("Error 2"))
+
 	Plugins = func() map[string]Plugin {
 		return map[string]Plugin{
-			"common":    CommonPlugin{},
-			"parameter": PluginWithParameter{},
-			"error1":    PluginWithError1{},
-			"error2":    PluginWithError2{},
+			"common":    common,
+			"parameter": parameter,
+			"error1":    error1,
+			"error2":    error2,
 		}
 	}
 }
