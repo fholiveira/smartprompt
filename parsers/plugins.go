@@ -8,7 +8,7 @@ import (
 
 type PluginParser struct{}
 
-func (parser PluginParser) Plugins() map[string]Plugin {
+var Plugins = func() map[string]Plugin {
 	return map[string]Plugin{
 		"user":              User{},
 		"host":              Host{},
@@ -26,7 +26,7 @@ func (parser PluginParser) Plugins() map[string]Plugin {
 }
 
 func (parser PluginParser) Parse(prompt PromptLine) (PromptLine, []error) {
-	plugins := parser.Plugins()
+	plugins := Plugins()
 
 	errors := ErrorList{}.Init()
 	for _, token := range prompt.Tokens() {
