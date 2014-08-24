@@ -2,6 +2,7 @@ package parsers
 
 import (
 	. "github.com/fholiveira/smartprompt/plugins"
+	"github.com/fholiveira/smartprompt/plugins/git"
 	"github.com/fholiveira/smartprompt/plugins/location"
 	"github.com/fholiveira/smartprompt/plugins/shell"
 )
@@ -15,7 +16,7 @@ var Plugins = func() map[string]Plugin {
 		"time":              DateTime{},
 		"dir":               Directory{},
 		"fqdn":              FullQualifiedDomainName{},
-		"git":               Git{},
+		"git":               git.GitStatus{},
 		"prompt:symbol":     PromptSymbol{},
 		"location":          location.Default{},
 		"shell":             shell.Shell{},

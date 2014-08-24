@@ -1,4 +1,4 @@
-package plugins
+package git
 
 import (
 	"os"
@@ -6,7 +6,7 @@ import (
 	"github.com/fholiveira/git2go"
 )
 
-type Git struct{}
+type GitStatus struct{}
 
 func getBranchName(repo *git.Repository) (string, error) {
 	reference, err := repo.Head()
@@ -31,10 +31,20 @@ func getRepository() (*git.Repository, error) {
 	return repo, nil
 }
 
-func (git Git) Prompt(parameter string) (string, error) {
+func (git GitStatus) Prompt(parameter string) (string, error) {
 	repo, err := getRepository()
 	if nil != err {
 		return "", nil
+	}
+
+	rebase := GitRebase{}.Init(repo)
+	if rebase.IsRebasing() {
+		status, err := rebase.Status()
+		if nil != err {
+			return "", nil
+		}
+
+		return "{RED:bold}[" + status + "]", nil
 	}
 
 	branchName, err := getBranchName(repo)
