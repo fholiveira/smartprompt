@@ -1,6 +1,7 @@
 package git
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/libgit2/git2go"
@@ -37,28 +38,43 @@ func getRepository() (*git.Repository, error) {
 	return repo, nil
 }
 
-func (git GitStatus) Prompt(parameter string) (string, error) {
+func (gitStatus GitStatus) Prompt(parameter string) (string, error) {
+
 	repo, err := getRepository()
 	if nil != err {
 		return "", nil
 	}
 
-	rebase := GitRebase{}.Init(repo)
-	if rebase.IsRebasing() {
-		status, err := rebase.Status()
-		if nil != err {
-			return "", nil
-		}
-
-		return "{RED:bold}[" + status + "]", nil
-	}
-
-	branchName, err := getBranchName(repo)
+	color := "{GREEN:bold}"
+	prompt, err := getBranchName(repo)
 	if nil != err {
 		return "", err
 	}
 
+	rebase := GitRebase{}.Init(repo)
+	if rebase.IsRebasing() {
+		prompt, err = rebase.Status()
+		if nil != err {
+			return "", nil
+		}
+
+		color = "{RED:bold}"
+	}
+
+	changes := GitChanges{}.Init(repo)
+	if changes.HasChanges() {
+		prompt += " " + fmt.Sprint(changes.StagedFilesCount(), changes.ModifiedFilesCount(), changes.UntrackedFilesCount())
+
+		if changes.ModifiedFilesCount() > 0 {
+			color = "{RED:bold}"
+		} else if changes.StagedFilesCount() > 0 {
+			color = "{YELLOW:bold}"
+		} else if changes.UntrackedFilesCount() > 0 {
+			color = "{CYAN:bold}"
+		}
+	}
+
 	repo.Free()
 
-	return "{GREEN:bold}[" + branchName + "]", nil
+	return color + "[" + prompt + "]", nil
 }
