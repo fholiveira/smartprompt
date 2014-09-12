@@ -3,7 +3,7 @@ package git
 import (
 	"os"
 
-	"github.com/fholiveira/git2go"
+	"github.com/libgit2/git2go"
 )
 
 type GitStatus struct{}
@@ -14,7 +14,13 @@ func getBranchName(repo *git.Repository) (string, error) {
 		return "", err
 	}
 
-	return reference.Branch().Name()
+	name, err := reference.Branch().Name()
+	if nil != err {
+		return "", err
+	}
+
+	reference.Free()
+	return name, nil
 }
 
 func getRepository() (*git.Repository, error) {
@@ -51,6 +57,8 @@ func (git GitStatus) Prompt(parameter string) (string, error) {
 	if nil != err {
 		return "", err
 	}
+
+	repo.Free()
 
 	return "{GREEN:bold}[" + branchName + "]", nil
 }

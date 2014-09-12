@@ -1,6 +1,6 @@
 package git
 
-import "github.com/fholiveira/git2go"
+import "github.com/libgit2/git2go"
 
 type GitRebase struct {
 	workdir string
@@ -29,23 +29,24 @@ func (rebase GitRebase) IsRebasing() bool {
 }
 
 func (rebase GitRebase) Status() (string, error) {
-	branch, err := rebase.tryGetRef(rebase.workdir + "rebase-apply/head-name")
+	ref, err := rebase.tryGetRef(rebase.workdir + "rebase-apply/head-name")
 	if nil != err {
 		return "", err
 	}
 
-	if nil == branch {
-		branch, err = rebase.tryGetRef(rebase.workdir + "rebase-merge/head-name")
+	if nil == ref {
+		ref, err = rebase.tryGetRef(rebase.workdir + "rebase-merge/head-name")
 		if nil != err {
 			return "", err
 		}
 	}
 
-	name, err := branch.Branch().Name()
+	name, err := ref.Branch().Name()
 	if nil != err {
 		return "", err
 	}
 
+	ref.Free()
 	return "rebasing " + name, nil
 }
 
