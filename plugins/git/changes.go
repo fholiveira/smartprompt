@@ -6,9 +6,10 @@ type GitChanges struct {
 	workdir string
 	repo    *git.Repository
 
-	staged    int
-	modified  int
-	untracked int
+	conflicted int
+	staged     int
+	modified   int
+	untracked  int
 }
 
 func (changes GitChanges) Init(repo *git.Repository) *GitChanges {
@@ -32,8 +33,15 @@ func (changes GitChanges) UntrackedFilesCount() int {
 	return changes.untracked
 }
 
+func (changes GitChanges) ConflictedFilesCount() int {
+	return changes.conflicted
+}
+
 func (changes GitChanges) HasChanges() bool {
-	return changes.modified > 0 || changes.staged > 0 || changes.untracked > 0
+	return changes.modified > 0 ||
+		changes.staged > 0 ||
+		changes.untracked > 0 ||
+		changes.conflicted > 0
 }
 
 func (changes *GitChanges) countChanges() {
@@ -46,10 +54,12 @@ func (changes *GitChanges) countChanges() {
 	for index := 0; index < entryCount; index++ {
 		entry, _ := status.ByIndex(index)
 
-		if isStaged(entry.Status) {
-			changes.staged++
+		if isStaged(entry.Status) && isModified(entry.Status) {
+			changes.conflicted++
 		} else if isModified(entry.Status) {
 			changes.modified++
+		} else if isStaged(entry.Status) {
+			changes.staged++
 		} else if isUntracked(entry.Status) {
 			changes.untracked++
 		}
@@ -59,7 +69,6 @@ func (changes *GitChanges) countChanges() {
 func isStaged(status git.Status) bool {
 	return status&git.StatusIndexNew > 0 ||
 		status&git.StatusIndexModified > 0 ||
-		status&git.StatusWtDeleted > 0 ||
 		status&git.StatusIndexDeleted > 0 ||
 		status&git.StatusIndexRenamed > 0 ||
 		status&git.StatusIndexTypeChange > 0

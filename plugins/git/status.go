@@ -9,21 +9,6 @@ import (
 
 type GitStatus struct{}
 
-func getBranchName(repo *git.Repository) (string, error) {
-	reference, err := repo.Head()
-	if nil != err {
-		return "", err
-	}
-
-	name, err := reference.Branch().Name()
-	if nil != err {
-		return "", err
-	}
-
-	reference.Free()
-	return name, nil
-}
-
 func getRepository() (*git.Repository, error) {
 	workingDirectory, err := os.Getwd()
 	if nil != err {
@@ -39,38 +24,43 @@ func getRepository() (*git.Repository, error) {
 }
 
 func (gitStatus GitStatus) Prompt(parameter string) (string, error) {
-
 	repo, err := getRepository()
 	if nil != err {
 		return "", nil
 	}
 
-	color := "{GREEN:bold}"
-	prompt, err := getBranchName(repo)
-	if nil != err {
-		return "", err
-	}
+	var color, prompt string
 
 	rebase := GitRebase{}.Init(repo)
 	if rebase.IsRebasing() {
+		color = "{RED:bold}"
 		prompt, err = rebase.Status()
 		if nil != err {
 			return "", nil
 		}
-
-		color = "{RED:bold}"
+	} else {
+		color = "{GREEN:bold}"
+		prompt, err = getBranchName(repo)
+		if nil != err {
+			return "", err
+		}
 	}
 
 	changes := GitChanges{}.Init(repo)
 	if changes.HasChanges() {
-		prompt += " " + fmt.Sprint(changes.StagedFilesCount(), changes.ModifiedFilesCount(), changes.UntrackedFilesCount())
-
-		if changes.ModifiedFilesCount() > 0 {
+		if changes.ConflictedFilesCount() > 0 {
+			prompt += " !" + fmt.Sprint(changes.ConflictedFilesCount())
 			color = "{RED:bold}"
-		} else if changes.StagedFilesCount() > 0 {
-			color = "{YELLOW:bold}"
-		} else if changes.UntrackedFilesCount() > 0 {
-			color = "{CYAN:bold}"
+		} else {
+			prompt += " " + fmt.Sprint(changes.StagedFilesCount(), changes.ModifiedFilesCount(), changes.UntrackedFilesCount())
+
+			if changes.ModifiedFilesCount() > 0 {
+				color = "{RED:bold}"
+			} else if changes.StagedFilesCount() > 0 {
+				color = "{YELLOW:bold}"
+			} else if changes.UntrackedFilesCount() > 0 {
+				color = "{CYAN:bold}"
+			}
 		}
 	}
 
