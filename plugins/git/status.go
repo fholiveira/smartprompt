@@ -28,22 +28,12 @@ func (gitStatus GitStatus) Prompt(parameter string) (string, error) {
 	if nil != err {
 		return "", nil
 	}
+	color := "{GREEN:bold}"
 
-	var color, prompt string
-
-	rebase := GitRebase{}.Init(repo)
-	if rebase.IsRebasing() {
-		color = "{RED:bold}"
-		prompt, err = rebase.Status()
-		if nil != err {
-			return "", nil
-		}
-	} else {
-		color = "{GREEN:bold}"
-		prompt, err = getBranchName(repo)
-		if nil != err {
-			return "", err
-		}
+	head := GitHead{}.Init(repo)
+	prompt, err := head.Name()
+	if nil != err {
+		return "", err
 	}
 
 	changes := GitChanges{}.Init(repo)
