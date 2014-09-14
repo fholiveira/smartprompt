@@ -8,9 +8,15 @@ import (
 	"github.com/libgit2/git2go"
 )
 
-type GitStatus struct{}
+type GitStatus struct {
+	repo *git.Repository
+}
 
-func getRepository() (*git.Repository, error) {
+func (gitStatus *GitStatus) repository() (*git.Repository, error) {
+	if nil != gitStatus.repo {
+		return gitStatus.repo, nil
+	}
+
 	workingDirectory, err := os.Getwd()
 	if nil != err {
 		return nil, err
@@ -21,11 +27,17 @@ func getRepository() (*git.Repository, error) {
 		return nil, err
 	}
 
+	gitStatus.repo = repo
 	return repo, nil
 }
 
+func (gitStatus GitStatus) IsApplicable() bool {
+	repo, _ := gitStatus.repository()
+	return nil != repo
+}
+
 func (gitStatus GitStatus) Prompt(parameter string) (string, error) {
-	repo, err := getRepository()
+	repo, err := gitStatus.repository()
 	if nil != err {
 		return "", nil
 	}

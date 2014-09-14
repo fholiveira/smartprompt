@@ -17,6 +17,7 @@ var Plugins = func() map[string]Plugin {
 		"dir":               Directory{},
 		"fqdn":              FullQualifiedDomainName{},
 		"git":               git.GitStatus{},
+		"sourcecontrol":     SourceControl{},
 		"prompt:symbol":     PromptSymbol{},
 		"location":          location.Default{},
 		"shell":             shell.Shell{},
