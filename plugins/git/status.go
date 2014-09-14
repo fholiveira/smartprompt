@@ -3,6 +3,7 @@ package git
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/libgit2/git2go"
 )
@@ -31,10 +32,7 @@ func (gitStatus GitStatus) Prompt(parameter string) (string, error) {
 	color := "{GREEN:bold}"
 
 	head := GitHead{}.Init(repo)
-	prompt, err := head.Name()
-	if nil != err {
-		return "", err
-	}
+	prompt, _ := head.Name()
 
 	changes := GitChanges{}.Init(repo)
 	if changes.HasChanges() {
@@ -56,5 +54,6 @@ func (gitStatus GitStatus) Prompt(parameter string) (string, error) {
 
 	repo.Free()
 
+	prompt = strings.TrimSpace(prompt)
 	return color + "[" + prompt + "]", nil
 }
