@@ -5,7 +5,7 @@ Utilitário para criar prompts bash espertos.
 
 ##Instalar
 
-Este projeto depende do git2go, portanto você deve instalá-la.
+Este projeto depende do [git2go](https://github.com/libgit2/git2go), portanto você deve instalá-la.
 
 Rode `go get github.com/fholiveira/smartprompt` para baixar o código e navegue para o diretório `$GOPATH/src/github.com/fholiveira/smartprompt`. Neste diretório rode `go install `para compilar e instalar os binários em `$GOPATH/bin/`. Adione esta pasta ao seu `$PATH` ou copie os binários para uma pasta que esteja no seu `$PATH`.
 
@@ -23,7 +23,7 @@ export PROMPT_COMMAND='export PS1="$(~/smartprompt --pattern="$PROMPT_PATTERN")"
 ```
 
 ##Rodar os testes
-Primeiro, você deve instalar o gorc. Depois, na pasta `$GOPATH/src/github.com/fholiveira/smartprompt`, rode o comando `gorc`.
+Primeiro, você deve instalar o [gorc](https://github.com/stretchr/gorc). Depois, na pasta `$GOPATH/src/github.com/fholiveira/smartprompt`, rode o comando `gorc`.
 
 ##Manual
 
@@ -66,7 +66,7 @@ Indica a data usando o formato especificado no pattern. Usando como exemplo a da
 ```
 
 #####{git}
-Se o diretório atual for um repositório git exibe as informações de acordo com o padrão [T H S M U C], onde
+Se o diretório atual for um repo git exibe as informações de acordo com o padrão **[T H S M U C]**, onde:
 
 ```
 T:    status (pode ser 'merging', 'rebasing' ou vazio)
