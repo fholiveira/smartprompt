@@ -16,6 +16,7 @@ var Plugins = func() map[string]Plugin {
 		"time":          DateTime{},
 		"dir":           Directory{},
 		"fqdn":          FullQualifiedDomainName{},
+		"line:break":    LineBreak{},
 		"prompt:symbol": PromptSymbol{},
 
 		"git":           git.GitStatus{},

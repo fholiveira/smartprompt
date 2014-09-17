@@ -42,6 +42,7 @@ Os valores envoltos em chaves são plugins. Um plugin pode aplicar uma cor ou ex
 {user}            Nome do usuário
 {dir}             Nome do diretório atual
 {fqdn}            Full qualified domain name
+{line:break}      Quebra de linha
 {prompt:symbol}   Usa '#' quando o usuario for root e '$' para os demais usuários
 {shell}           Nome do shell
 {shell:version}   Versão do shell
