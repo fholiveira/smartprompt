@@ -11,18 +11,21 @@ type PluginParser struct{}
 
 var Plugins = func() map[string]Plugin {
 	return map[string]Plugin{
-		"user":              User{},
-		"host":              Host{},
-		"time":              DateTime{},
-		"dir":               Directory{},
-		"fqdn":              FullQualifiedDomainName{},
-		"git":               git.GitStatus{},
-		"sourcecontrol":     SourceControl{},
-		"prompt:symbol":     PromptSymbol{},
+		"user":          User{},
+		"host":          Host{},
+		"time":          DateTime{},
+		"dir":           Directory{},
+		"fqdn":          FullQualifiedDomainName{},
+		"prompt:symbol": PromptSymbol{},
+
+		"git":           git.GitStatus{},
+		"sourcecontrol": SourceControl{},
+
+		"shell":         shell.Shell{},
+		"shell:version": shell.Version{},
+		"shell:release": shell.Release{},
+
 		"location":          location.Default{},
-		"shell":             shell.Shell{},
-		"shell:version":     shell.Version{},
-		"shell:release":     shell.Release{},
 		"location:vimstyle": location.VimStyle{},
 	}
 }
