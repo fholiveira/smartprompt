@@ -13,13 +13,13 @@ Rode `go get github.com/fholiveira/smartprompt` para baixar o código e navegue 
 
 Adicione a seguinte linha ao seu `~/.bashrc` para usar o prompt padrão:
 ```bash
-export PROMPT_COMMAND='export PS1="$(~/smartprompt)"'´
+export PROMPT_COMMAND='export PS1="$(smartprompt)"'´
 ```
 
 Se você for usar um prompt customizado, em vez disso adicione:
 ```bash
 export PROMPT_PATTERN="meu prompt customizado"
-export PROMPT_COMMAND='export PS1="$(~/smartprompt --pattern="$PROMPT_PATTERN")"'
+export PROMPT_COMMAND='export PS1="$(smartprompt --pattern="$PROMPT_PATTERN")"'
 ```
 
 ##Rodar os testes
@@ -50,7 +50,7 @@ Os valores envoltos em chaves são plugins. Um plugin pode aplicar uma cor ou ex
 {location}        Caminho até o diretório atual
 ```
 #####{location:vimstyle}
-Caminho até o diretório atual usando a sintax do vim. Se diret[orio atual for '/mnt/pendrive/music':
+Caminho até o diretório atual usando a sintax do vim. Se diretório atual for '/mnt/pendrive/music':
 
 ```
 {location:vimstyle}    /m/p/music
