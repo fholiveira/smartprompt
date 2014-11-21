@@ -22,6 +22,11 @@ func (gitStatus *GitStatus) repository() (*git.Repository, error) {
 		return nil, err
 	}
 
+	workingDirectory, err = git.Discover(workingDirectory, false, nil)
+	if err != nil {
+		return nil, err
+	}
+
 	repo, err := git.OpenRepository(workingDirectory)
 	if err != nil {
 		return nil, err
