@@ -19,6 +19,8 @@ var Plugins = func() map[string]Plugin {
 		"line:break":    LineBreak{},
 		"prompt:symbol": PromptSymbol{},
 
+		"virtualenv": Virtualenv{},
+
 		"git":           git.GitStatus{},
 		"sourcecontrol": SourceControl{},
 
