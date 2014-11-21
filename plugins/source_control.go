@@ -8,14 +8,14 @@ type SourceControlPlugin interface {
 	IsApplicable() bool
 }
 
-func (sourceControl SourceControl) Prompt(parameter string) (string, error) {
+func (sourceControl SourceControl) Prompt(parameters []string) (string, error) {
 	plugins := [...]SourceControlPlugin{
 		git.GitStatus{},
 	}
 
 	for _, plugin := range plugins {
 		if plugin.IsApplicable() {
-			return (plugin.(Plugin)).Prompt(parameter)
+			return (plugin.(Plugin)).Prompt(parameters)
 		}
 	}
 

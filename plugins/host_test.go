@@ -7,7 +7,7 @@ import (
 )
 
 func TestHost(t *testing.T) {
-	host, err := Host{}.Prompt("")
+	host, err := Host{}.Prompt(nil)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, "\\h", host)

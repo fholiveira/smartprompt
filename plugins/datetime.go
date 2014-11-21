@@ -31,8 +31,9 @@ func (dateTime DateTime) LongFormats() map[string]string {
 	}
 }
 
-func (dateTime DateTime) Prompt(parameter string) (string, error) {
-	layout := parameter
+func (dateTime DateTime) Prompt(parameters []string) (string, error) {
+	layout := parameters[0]
+
 	for key, value := range dateTime.LongFormats() {
 		layout = strings.Replace(layout, key, value, -1)
 	}

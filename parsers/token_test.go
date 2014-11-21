@@ -17,11 +17,11 @@ func TestGetTokenNameWhenTokenDoesNotHaveParameter(t *testing.T) {
 }
 
 func TestGetTokenParameterWhenTokenHasParameter(t *testing.T) {
-	parameter := Token("name123|parameter987").Parameter()
-	assert.Equal(t, "parameter987", parameter)
+	parameters := Token("name123|parameter987").Parameters()
+	assert.Equal(t, "parameter987", parameters[0])
 }
 
 func TestGetTokenParameterWhenTokenDoesNotHaveParameter(t *testing.T) {
-	parameter := Token("name123").Parameter()
-	assert.Empty(t, parameter)
+	parameters := Token("name123").Parameters()
+	assert.Nil(t, parameters)
 }

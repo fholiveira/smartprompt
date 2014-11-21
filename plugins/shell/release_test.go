@@ -7,7 +7,7 @@ import (
 )
 
 func TestShellRelease(t *testing.T) {
-	release, err := Release{}.Prompt("")
+	release, err := Release{}.Prompt(nil)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, "\\V", release)

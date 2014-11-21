@@ -41,7 +41,7 @@ func (gitStatus GitStatus) IsApplicable() bool {
 	return nil != repo
 }
 
-func (gitStatus GitStatus) Prompt(parameter string) (string, error) {
+func (gitStatus GitStatus) Prompt(parameters []string) (string, error) {
 	repo, err := gitStatus.repository()
 	if nil != err {
 		return "", nil

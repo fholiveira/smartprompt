@@ -49,6 +49,14 @@ Os valores envoltos em chaves são plugins. Um plugin pode aplicar uma cor ou ex
 {shell:release}   Release do shell
 {location}        Caminho até o diretório atual
 ```
+#####{virtualenv|*<prefix>*|*<sufix>*}
+Exibe o Python Virtualenv atual; os parâmetros *<prefix>* e *<sufix>* serão adicionados ao começo e fim do nome do virtualenv. Se o virtualenv for uma pasta oculta, o nome dele será motrado sem o "." inicial.
+
+```
+{virtualenv|(|)}    (env)
+{virtualenv|↦ }	    ↦ env
+```
+
 #####{location:vimstyle}
 Caminho até o diretório atual usando a sintax do vim. Se diretório atual for '/mnt/pendrive/music':
 
@@ -56,8 +64,8 @@ Caminho até o diretório atual usando a sintax do vim. Se diretório atual for 
 {location:vimstyle}    /m/p/music
 ```
 
-#####{time|pattern}
-Indica a data usando o formato especificado no pattern. Usando como exemplo a data '09 de Janeiro de 2014 as 21:07:02'
+#####{time|*<pattern>*}
+Indica a data usando o formato especificado no parâmetro *<pattern>*. Usando como exemplo a data '09 de Janeiro de 2014 as 21:07:02'
 
 ```
 {time|dd/yy/mm}    09/01/2014
@@ -77,7 +85,7 @@ M:    quantidade de arquivos modificados
 U:    quantidade de arquivos untracked
 C:    quantidade de arquivos em conflito
 ```
-
+i
 ###Cores
 São suportadas as cores BLACK, RED, GREEN, YELLOW, BLUE, PURPLE, CYAN, WHITE.
 Elas podem ser usadas da seguinte forma:

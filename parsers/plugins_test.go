@@ -12,9 +12,14 @@ import (
 
 type PluginMock struct{ mock.Mock }
 
-func (plugin PluginMock) Prompt(parameter string) (string, error) {
-	args := plugin.Mock.Called(parameter)
-	return args.String(0), args.Error(1)
+func (plugin PluginMock) Prompt(parameters []string) (string, error) {
+	if nil == parameters {
+		args := plugin.Mock.Called("")
+		return args.String(0), args.Error(1)
+	} else {
+		args := plugin.Mock.Called(parameters)
+		return args.String(0), args.Error(1)
+	}
 }
 
 type PluginParserTestSuite struct {
@@ -28,7 +33,7 @@ func (suite *PluginParserTestSuite) SetupTest() {
 	common, parameter, error1, error2 := PluginMock{}, PluginMock{}, PluginMock{}, PluginMock{}
 
 	common.On("Prompt", "").Return("common_plugin_value", nil)
-	parameter.On("Prompt", "123").Return("p_value__123", nil)
+	parameter.On("Prompt", []string{"123"}).Return("p_value__123", nil)
 	error1.On("Prompt", "").Return("", errors.New("Error 1"))
 	error2.On("Prompt", "").Return("", errors.New("Error 2"))
 

@@ -20,7 +20,7 @@ func (suite *DateTimeTestSuite) SetupTest() {
 }
 
 func (suite *DateTimeTestSuite) TestLongYearFormat() {
-	prompt, err := DateTime{}.Prompt("yy")
+	prompt, err := DateTime{}.Prompt([]string{"yy"})
 	assert := assert.New(suite.T())
 
 	if assert.NoError(err) {
@@ -29,7 +29,7 @@ func (suite *DateTimeTestSuite) TestLongYearFormat() {
 }
 
 func (suite *DateTimeTestSuite) TestLongMonthFormat() {
-	prompt, err := DateTime{}.Prompt("mm")
+	prompt, err := DateTime{}.Prompt([]string{"mm"})
 	assert := assert.New(suite.T())
 
 	if assert.NoError(err) {
@@ -38,7 +38,7 @@ func (suite *DateTimeTestSuite) TestLongMonthFormat() {
 }
 
 func (suite *DateTimeTestSuite) TestLongDayFormat() {
-	prompt, err := DateTime{}.Prompt("dd")
+	prompt, err := DateTime{}.Prompt([]string{"dd"})
 	assert := assert.New(suite.T())
 
 	if assert.NoError(err) {
@@ -47,7 +47,7 @@ func (suite *DateTimeTestSuite) TestLongDayFormat() {
 }
 
 func (suite *DateTimeTestSuite) TestLongHourFormat() {
-	prompt, err := DateTime{}.Prompt("hh")
+	prompt, err := DateTime{}.Prompt([]string{"hh"})
 	assert := assert.New(suite.T())
 
 	if assert.NoError(err) {
@@ -56,7 +56,7 @@ func (suite *DateTimeTestSuite) TestLongHourFormat() {
 }
 
 func (suite *DateTimeTestSuite) TestLongMinuteFormat() {
-	prompt, err := DateTime{}.Prompt("MM")
+	prompt, err := DateTime{}.Prompt([]string{"MM"})
 	assert := assert.New(suite.T())
 
 	if assert.NoError(err) {
@@ -65,7 +65,7 @@ func (suite *DateTimeTestSuite) TestLongMinuteFormat() {
 }
 
 func (suite *DateTimeTestSuite) TestLongSecondFormat() {
-	prompt, err := DateTime{}.Prompt("ss")
+	prompt, err := DateTime{}.Prompt([]string{"ss"})
 	assert := assert.New(suite.T())
 
 	if assert.NoError(err) {
@@ -74,7 +74,7 @@ func (suite *DateTimeTestSuite) TestLongSecondFormat() {
 }
 
 func (suite *DateTimeTestSuite) TestShortYearFormat() {
-	prompt, err := DateTime{}.Prompt("y")
+	prompt, err := DateTime{}.Prompt([]string{"y"})
 	assert := assert.New(suite.T())
 
 	if assert.NoError(err) {
@@ -83,7 +83,7 @@ func (suite *DateTimeTestSuite) TestShortYearFormat() {
 }
 
 func (suite *DateTimeTestSuite) TestShortMonthFormat() {
-	prompt, err := DateTime{}.Prompt("m")
+	prompt, err := DateTime{}.Prompt([]string{"m"})
 	assert := assert.New(suite.T())
 
 	if assert.NoError(err) {
@@ -92,7 +92,7 @@ func (suite *DateTimeTestSuite) TestShortMonthFormat() {
 }
 
 func (suite *DateTimeTestSuite) TestShortDayFormat() {
-	prompt, err := DateTime{}.Prompt("d")
+	prompt, err := DateTime{}.Prompt([]string{"d"})
 	assert := assert.New(suite.T())
 
 	if assert.NoError(err) {
@@ -101,7 +101,7 @@ func (suite *DateTimeTestSuite) TestShortDayFormat() {
 }
 
 func (suite *DateTimeTestSuite) TestShortHourFormat() {
-	prompt, err := DateTime{}.Prompt("h")
+	prompt, err := DateTime{}.Prompt([]string{"h"})
 	assert := assert.New(suite.T())
 
 	if assert.NoError(err) {
@@ -110,7 +110,7 @@ func (suite *DateTimeTestSuite) TestShortHourFormat() {
 }
 
 func (suite *DateTimeTestSuite) TestShortMinuteFormat() {
-	prompt, err := DateTime{}.Prompt("M")
+	prompt, err := DateTime{}.Prompt([]string{"M"})
 	assert := assert.New(suite.T())
 
 	if assert.NoError(err) {
@@ -119,7 +119,7 @@ func (suite *DateTimeTestSuite) TestShortMinuteFormat() {
 }
 
 func (suite *DateTimeTestSuite) TestShortSecondFormat() {
-	prompt, err := DateTime{}.Prompt("s")
+	prompt, err := DateTime{}.Prompt([]string{"s"})
 	assert := assert.New(suite.T())
 
 	if assert.NoError(err) {

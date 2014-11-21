@@ -7,7 +7,7 @@ import (
 )
 
 func TestFullQualifiedDomainName(t *testing.T) {
-	fqdn, err := FullQualifiedDomainName{}.Prompt("")
+	fqdn, err := FullQualifiedDomainName{}.Prompt(nil)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, "\\H", fqdn)

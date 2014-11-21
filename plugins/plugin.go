@@ -1,5 +1,5 @@
 package plugins
 
 type Plugin interface {
-	Prompt(parameter string) (string, error)
+	Prompt(parameters []string) (string, error)
 }

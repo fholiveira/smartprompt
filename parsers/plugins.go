@@ -40,7 +40,7 @@ func (parser PluginParser) Parse(prompt PromptLine) (PromptLine, []error) {
 	for _, token := range prompt.Tokens() {
 		plugin, isPlugin := plugins[token.Name()]
 		if isPlugin {
-			pluginPrompt, err := plugin.Prompt(token.Parameter())
+			pluginPrompt, err := plugin.Prompt(token.Parameters())
 
 			errors.Append(err)
 			prompt.Apply(token, pluginPrompt)

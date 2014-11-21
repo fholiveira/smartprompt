@@ -36,7 +36,7 @@ func concatWithVimStyle(workingDirectory string) string {
 	return simplePath
 }
 
-func (location VimStyle) Prompt(parameter string) (string, error) {
+func (location VimStyle) Prompt(parameters []string) (string, error) {
 	workingDirectory, err := getWorkingDir()
 	if nil != err {
 		return "", err
