@@ -34,9 +34,7 @@ var Plugins = func() map[string]Plugin {
 }
 
 func (parser PluginParser) Parse(prompt PromptLine) (PromptLine, []error) {
-	plugins := Plugins()
-
-	errors := ErrorList{}.Init()
+	plugins, errors := Plugins(), ErrorList{}.Init()
 	for _, token := range prompt.Tokens() {
 		plugin, isPlugin := plugins[token.Name()]
 		if isPlugin {

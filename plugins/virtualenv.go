@@ -6,9 +6,9 @@ import (
 	"strings"
 )
 
-type Virtualenv struct{}
-
 var getVirtualenv = func() string { return os.Getenv("VIRTUAL_ENV") }
+
+type Virtualenv struct{}
 
 func (plugin Virtualenv) Prompt(parameters []string) (string, error) {
 	directory := getVirtualenv()
@@ -17,16 +17,14 @@ func (plugin Virtualenv) Prompt(parameters []string) (string, error) {
 		return "", nil
 	}
 
-	venv := path.Base(directory)
-	venv = strings.TrimPrefix(venv, ".")
-
 	prefix, sufix := plugin.complements(parameters)
+	venv := strings.TrimPrefix(path.Base(directory), ".")
 
 	return prefix + venv + sufix, nil
 }
 
 func (plugin Virtualenv) complements(parameters []string) (string, string) {
-	if len(parameters) <= 0 {
+	if len(parameters) == 0 {
 		return "", ""
 	}
 
