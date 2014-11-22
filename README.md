@@ -43,12 +43,27 @@ Os valores envoltos em chaves são plugins. Um plugin pode aplicar uma cor ou ex
 {dir}             Nome do diretório atual
 {fqdn}            Full qualified domain name
 {line:break}      Quebra de linha
-{prompt:symbol}   Usa '#' quando o usuario for root e '$' para os demais usuários
+{symbol}   Usa '#' quando o usuario for root e '$' para os demais usuários
 {shell}           Nome do shell
 {shell:version}   Versão do shell
 {shell:release}   Release do shell
 {location}        Caminho até o diretório atual
 ```
+#####{symbol|*`<root>`*|*`<common user>`*}
+Exibe `<root>` quando o usuário for root e `<common>` quando for um usuário comum. Se os parâmetros não forem especificados exibe "#" para root e "$" para usuário comum:
+
+```
+Usuário root:
+    {symbol}        #
+    {symbol|>}      >
+    {symbol|>>|->}  >>
+
+Usuário comum:
+    {symbol}        $
+    {symbol|>}      $
+    {symbol|>>|->}  ->
+```
+
 #####{virtualenv|*`<prefix>`*|*`<sufix>`*}
 Exibe o Python Virtualenv atual; os parâmetros *`<prefix>`* e *`<sufix>`* serão adicionados ao começo e fim do nome do virtualenv. Se o virtualenv for uma pasta oculta, o nome dele será motrado sem o "." inicial.
 
@@ -85,7 +100,6 @@ M:    quantidade de arquivos modificados
 U:    quantidade de arquivos untracked
 C:    quantidade de arquivos em conflito
 ```
-i
 ###Cores
 São suportadas as cores BLACK, RED, GREEN, YELLOW, BLUE, PURPLE, CYAN, WHITE.
 Elas podem ser usadas da seguinte forma:

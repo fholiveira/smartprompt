@@ -11,13 +11,13 @@ type PluginParser struct{}
 
 var Plugins = func() map[string]Plugin {
 	return map[string]Plugin{
-		"user":          User{},
-		"host":          Host{},
-		"time":          DateTime{},
-		"dir":           Directory{},
-		"fqdn":          FullQualifiedDomainName{},
-		"line:break":    LineBreak{},
-		"prompt:symbol": PromptSymbol{},
+		"user":       User{},
+		"host":       Host{},
+		"time":       DateTime{},
+		"dir":        Directory{},
+		"fqdn":       FullQualifiedDomainName{},
+		"line:break": LineBreak{},
+		"symbol":     PromptSymbol{},
 
 		"virtualenv": Virtualenv{},
 
