@@ -5,9 +5,7 @@ Utilitário para criar prompts bash espertos.
 
 ##Instalar
 
-Este projeto depende do [git2go](https://github.com/libgit2/git2go), portanto você deve instalá-la.
-
-Rode `go get github.com/fholiveira/smartprompt` para baixar o código e navegue para o diretório `$GOPATH/src/github.com/fholiveira/smartprompt`. Neste diretório rode `go install `para compilar e instalar os binários em `$GOPATH/bin/`. Adione esta pasta ao seu `$PATH` ou copie os binários para uma pasta que esteja no seu `$PATH`.
+Baixe o [binário da última versão](https://github.com/fholiveira/smartprompt/releases) e coloque-o em uma pasta que esteja no seu `$PATH`.
 
 ##Usar
 
@@ -16,11 +14,17 @@ Adicione a seguinte linha ao seu `~/.bashrc` para usar o prompt padrão:
 export PROMPT_COMMAND='export PS1="$(smartprompt)"'´
 ```
 
-Se você for usar um prompt customizado, em vez disso adicione:
+Se você for usar um prompt customizado adicione:
 ```bash
 export PROMPT_PATTERN="meu prompt customizado"
 export PROMPT_COMMAND='export PS1="$(smartprompt --pattern="$PROMPT_PATTERN")"'
 ```
+
+##Rodar a partir do código fonte
+
+Este projeto depende do [git2go](https://github.com/libgit2/git2go), portanto você deve instalá-la.
+
+Rode `go get github.com/fholiveira/smartprompt` para baixar o código e navegue para o diretório `$GOPATH/src/github.com/fholiveira/smartprompt`. Neste diretório rode `go install `para compilar e instalar os binários em `$GOPATH/bin/`. Adione esta pasta ao seu `$PATH` ou copie os binários para uma pasta que esteja no seu `$PATH`.
 
 ##Rodar os testes
 Primeiro, você deve instalar o [gorc](https://github.com/stretchr/gorc). Depois, na pasta `$GOPATH/src/github.com/fholiveira/smartprompt`, rode o comando `gorc`.
@@ -31,7 +35,7 @@ O smartprompt, por padrão, tem o seguinte aspecto:
 
 Este prompt default é definido pela seguinte linha:
 
-`{GREEN:bold}{user}@{host} {BLUE:bold}{location:vimstyle} {sourcecontrol} {PURPLE:bold}{prompt:symbol} {TEXT:reset}`
+`{GREEN:bold}{user}@{host} {BLUE:bold}{location:vimstyle} {sourcecontrol} {PURPLE:bold}{symbol} {TEXT:reset}`
 
 Os valores envoltos em chaves são plugins. Um plugin pode aplicar uma cor ou exibir uma informação. Você pode definir um prompt diferente do padrão usando a opção `--pattern="meu prompt customizado"` ao rodar o smartprompt.
 
