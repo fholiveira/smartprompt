@@ -8,8 +8,10 @@ import (
 
 type Virtualenv struct{}
 
+var getVirtualenv = func() string { return os.Getenv("VIRTUAL_ENV") }
+
 func (plugin Virtualenv) Prompt(parameters []string) (string, error) {
-	directory := os.Getenv("VIRTUAL_ENV")
+	directory := getVirtualenv()
 
 	if len(directory) == 0 {
 		return "", nil
