@@ -25,7 +25,10 @@ func TestVimStyleLocationWhenCurrentDirIsHomeDir(t *testing.T) {
 }
 
 func TestVimStyleLocationWhenCurrentDirIsiChildOfRootDir(t *testing.T) {
-	getWorkingDir = func() (string, error) { return "/home/Documents/20140322/test", nil }
+	getWorkingDir = func() (string, error) {
+		return "/home/Documents/20140322/test", nil
+	}
+
 	location, err := VimStyle{}.Prompt(nil)
 
 	if assert.NoError(t, err) {
@@ -34,7 +37,10 @@ func TestVimStyleLocationWhenCurrentDirIsiChildOfRootDir(t *testing.T) {
 }
 
 func TestVimStyleLocationWhenCurrentDirIsChildOfHomeDir(t *testing.T) {
-	getWorkingDir = func() (string, error) { return "~/Projects/golang/src/smartprompt", nil }
+	getWorkingDir = func() (string, error) {
+		return "~/Projects/golang/src/smartprompt", nil
+	}
+
 	location, err := VimStyle{}.Prompt(nil)
 
 	if assert.NoError(t, err) {

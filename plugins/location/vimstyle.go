@@ -1,46 +1,51 @@
 package location
 
-import "strings"
+import (
+	gopath "path"
+	"strings"
+)
+
+func firstChar(text string) string {
+	return string([]rune(text)[0])
+}
 
 type VimStyle struct{}
 
-func splitDirectory(directory string) []string {
+func (plugin VimStyle) splitPath(directory string) ([]string, string) {
 	path := []string{}
 	for _, dir := range strings.Split(directory, "/") {
 		if dir != "" {
 			path = append(path, dir)
 		}
 	}
-
-	return path
+	lastItem := len(path) - 1
+	return path[:lastItem], path[lastItem]
 }
 
-func concatWithVimStyle(workingDirectory string) string {
+func (plugin VimStyle) concatWithVimStyle(workingDirectory string) string {
 	if workingDirectory == "/" {
 		return workingDirectory
 	}
 
-	path := splitDirectory(workingDirectory)
+	path, directory := plugin.splitPath(workingDirectory)
 
-	var simplePath string
-	for _, directory := range path[:len(path)-1] {
-		simplePath += string([]rune(directory)[0]) + "/"
+	var vimPath string
+	for _, directory := range path {
+		vimPath = gopath.Join(vimPath, firstChar(directory))
 	}
 
-	if string([]rune(workingDirectory)[0]) == "/" {
-		simplePath = "/" + simplePath
+	if firstChar(workingDirectory) == "/" {
+		vimPath = "/" + vimPath
 	}
 
-	simplePath += path[len(path)-1]
-
-	return simplePath
+	return gopath.Join(vimPath, directory)
 }
 
-func (location VimStyle) Prompt(parameters []string) (string, error) {
+func (plugin VimStyle) Prompt(parameters []string) (string, error) {
 	workingDirectory, err := getWorkingDir()
 	if nil != err {
 		return "", err
 	}
 
-	return concatWithVimStyle(workingDirectory), nil
+	return plugin.concatWithVimStyle(workingDirectory), nil
 }
