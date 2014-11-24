@@ -33,9 +33,7 @@ Primeiro, você deve instalar o [gorc](https://github.com/stretchr/gorc). Depois
 
 ##Manual
 
-O smartprompt, por padrão, tem o seguinte aspecto:
-
-Este prompt default é definido pela seguinte linha:
+O prompt padrão do smartprompt é definido pelo seguinte pattern:
 
 `{GREEN:bold}{user}@{host} {BLUE:bold}{location:vimstyle} {sourcecontrol} {PURPLE:bold}{symbol} {TEXT:reset}`
 
