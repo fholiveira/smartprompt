@@ -33,7 +33,11 @@ Primeiro, você deve instalar o [gorc](https://github.com/stretchr/gorc). Depois
 
 ##Manual
 
-O prompt padrão do smartprompt é definido pelo seguinte pattern:
+O prompt padrão gerado pelo smartprompt tem a seguinte aparência:
+
+![Default prompt.](https://raw.githubusercontent.com/fholiveira/smartprompt/master/default_prompt.png)
+
+Esta aparência é definida pelo seguinte pattern:
 
 `{GREEN:bold}{user}@{host} {BLUE:bold}{location:vimstyle} {sourcecontrol} {PURPLE:bold}{symbol} {TEXT:reset}`
 
@@ -71,7 +75,7 @@ Exibe o Python Virtualenv atual; os parâmetros *`<prefix>`* e *`<sufix>`* serã
 
 ```
 {virtualenv|(|)}    (env)
-{virtualenv|↦ }	    ↦ env
+{virtualenv|↦ }	   ↦ env
 ```
 
 #####{location|*`<absolute>`*}
