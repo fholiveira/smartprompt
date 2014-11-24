@@ -3,6 +3,8 @@ Smart Prompt
 
 Utilitário para criar prompts bash espertos.
 
+![Smartprompt in action](https://raw.githubusercontent.com/fholiveira/smartprompt/master/demo.gif)
+
 ##Instalar
 
 Baixe o [binário da última versão](https://github.com/fholiveira/smartprompt/releases) e coloque-o em uma pasta que esteja no seu `$PATH`.
@@ -24,7 +26,7 @@ export PROMPT_COMMAND='export PS1="$(smartprompt --pattern="$PROMPT_PATTERN")"'
 
 Este projeto depende do [git2go](https://github.com/libgit2/git2go), portanto você deve instalá-la.
 
-Rode `go get github.com/fholiveira/smartprompt` para baixar o código e navegue para o diretório `$GOPATH/src/github.com/fholiveira/smartprompt`. Neste diretório rode `go install `para compilar e instalar os binários em `$GOPATH/bin/`. Adione esta pasta ao seu `$PATH` ou copie os binários para uma pasta que esteja no seu `$PATH`.
+Rode `go get github.com/fholiveira/smartprompt` para baixar o código e navegue para o diretório `$GOPATH/src/github.com/fholiveira/smartprompt`. Neste diretório rode `go install `para compilar e instalar os binários em `$GOPATH/bin/`. Adicione esta pasta ao seu `$PATH` ou copie os binários para uma pasta que esteja no seu `$PATH`.
 
 ##Rodar os testes
 Primeiro, você deve instalar o [gorc](https://github.com/stretchr/gorc). Depois, na pasta `$GOPATH/src/github.com/fholiveira/smartprompt`, rode o comando `gorc`.
@@ -47,7 +49,7 @@ Os valores envoltos em chaves são plugins. Um plugin pode aplicar uma cor ou ex
 {dir}             Nome do diretório atual
 {fqdn}            Full qualified domain name
 {line:break}      Quebra de linha
-{symbol}   Usa '#' quando o usuario for root e '$' para os demais usuários
+{symbol}   Usa '#' quando o usuário for root e '$' para os demais usuários
 {shell}           Nome do shell
 {shell:version}   Versão do shell
 {shell:release}   Release do shell
@@ -69,7 +71,7 @@ Usuário comum:
 ```
 
 #####{virtualenv|*`<prefix>`*|*`<sufix>`*}
-Exibe o Python Virtualenv atual; os parâmetros *`<prefix>`* e *`<sufix>`* serão adicionados ao começo e fim do nome do virtualenv. Se o virtualenv for uma pasta oculta, o nome dele será motrado sem o "." inicial.
+Exibe o Python Virtualenv atual; os parâmetros *`<prefix>`* e *`<sufix>`* serão adicionados ao começo e fim do nome do virtualenv. Se o virtualenv for uma pasta oculta, o nome dele será mostrado sem o "." inicial.
 
 ```
 {virtualenv|(|)}    (env)
