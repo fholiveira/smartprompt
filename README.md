@@ -47,11 +47,9 @@ Os valores envoltos em chaves são plugins. Um plugin pode aplicar uma cor ou ex
 {dir}             Nome do diretório atual
 {fqdn}            Full qualified domain name
 {line:break}      Quebra de linha
-{symbol}   Usa '#' quando o usuário for root e '$' para os demais usuários
 {shell}           Nome do shell
 {shell:version}   Versão do shell
 {shell:release}   Release do shell
-{location}        Caminho até o diretório atual
 ```
 #####{symbol|*`<root>`*|*`<common user>`*}
 Exibe `<root>` quando o usuário for root e `<common>` quando for um usuário comum. Se os parâmetros não forem especificados exibe "#" para root e "$" para usuário comum:
@@ -76,11 +74,42 @@ Exibe o Python Virtualenv atual; os parâmetros *`<prefix>`* e *`<sufix>`* serã
 {virtualenv|↦ }	    ↦ env
 ```
 
-#####{location:vimstyle}
-Caminho até o diretório atual usando a sintax do vim. Se diretório atual for '/mnt/pendrive/music':
+#####{location|*`<absolute>`*}
+Caminho do diretório atual. Por padrão este plugin mantém quaisquer symlinks presentes - para usar o caminho absoluto use o parâmetro opcional *`<absolute>`*:
 
 ```
-{location:vimstyle}    /m/p/music
+Caminho
+  -> com symlink /data/music
+  -> absoluto /mnt/disk1/2014/Musics
+      
+  {location:vimstyle}            /data/music
+  {location:vimstyle|absolute}   /mnt/disk1/2014/Musics
+
+Caminho
+  -> com symlink /home/usuario/projetos/smartprompt
+  -> absoluto /home/usuario/projetos/golang/src/github.com/usuario/smartprompt
+      
+  {location:vimstyle}            ~/projetos/smartprompt
+  {location:vimstyle|absolute}   ~/projetos/golang/src/github.com/usuario/smartprompt
+```
+
+#####{location:vimstyle|*`<absolute>`*}
+Caminho até o diretório atual usando a sintax do vim. Por padrão este plugin mantém quaisquer symlinks presentes - para usar o caminho absoluto use o parâmetro opcional *`<absolute>`*:
+
+```
+Caminho
+  -> com symlink /data/music
+  -> absoluto /mnt/disk1/2014/Musics
+      
+  {location:vimstyle}            /d/music
+  {location:vimstyle|absolute}   /m/d/2/Musics
+
+Caminho
+  -> com symlink /home/usuario/projetos/smartprompt
+  -> absoluto /home/usuario/projetos/golang/src/github.com/usuario/smartprompt
+      
+  {location:vimstyle}            ~/p/smartprompt
+  {location:vimstyle|absolute}   ~/p/g/s/g/u/smartprompt
 ```
 
 #####{time|*`<pattern>`*}

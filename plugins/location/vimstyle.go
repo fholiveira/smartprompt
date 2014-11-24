@@ -22,30 +22,35 @@ func (plugin VimStyle) splitPath(directory string) ([]string, string) {
 	return path[:lastItem], path[lastItem]
 }
 
-func (plugin VimStyle) concatWithVimStyle(workingDirectory string) string {
-	if workingDirectory == "/" {
-		return workingDirectory
+func (plugin VimStyle) applyVimStyle(path string) string {
+	if path == "/" || len(path) == 0 {
+		return path
 	}
 
-	path, directory := plugin.splitPath(workingDirectory)
+	vimPath := ""
+	if firstChar(path) == "/" {
+		vimPath = "/"
+	}
 
-	var vimPath string
-	for _, directory := range path {
+	basePath, directoryName := plugin.splitPath(path)
+
+	for _, directory := range basePath {
 		vimPath = gopath.Join(vimPath, firstChar(directory))
 	}
 
-	if firstChar(workingDirectory) == "/" {
-		vimPath = "/" + vimPath
-	}
-
-	return gopath.Join(vimPath, directory)
+	return gopath.Join(vimPath, directoryName)
 }
 
 func (plugin VimStyle) Prompt(parameters []string) (string, error) {
-	workingDirectory, err := getWorkingDir()
+	absolutePath, symlinkPath, err := currentDirectory()
 	if nil != err {
 		return "", err
 	}
 
-	return plugin.concatWithVimStyle(workingDirectory), nil
+	path := symlinkPath
+	if len(parameters) > 0 && parameters[0] == "absolute" {
+		path = absolutePath
+	}
+
+	return plugin.applyVimStyle(path), nil
 }

@@ -8,20 +8,30 @@ import (
 
 type Default struct{}
 
-var getWorkingDir = func() (string, error) {
-	workingDirectory, err := os.Getwd()
+var currentDirectory = func() (string, string, error) {
+	path, err := os.Getwd()
 	if nil != err {
-		return "", err
+		return "", "", err
 	}
 
 	user, err := user.Current()
 	if nil != err {
-		return "", err
+		return "", "", err
 	}
 
-	return strings.Replace(workingDirectory, user.HomeDir, "~", 1), nil
+	absolutePath := strings.Replace(path, user.HomeDir, "~", 1)
+	symlinkPath := strings.Replace(os.Getenv("PWD"), user.HomeDir, "~", 1)
+
+	return absolutePath, symlinkPath, nil
 }
 
 func (location Default) Prompt(parameters []string) (string, error) {
-	return getWorkingDir()
+	absolutePath, symlinkPath, err := currentDirectory()
+	path := symlinkPath
+
+	if len(parameters) > 0 && parameters[0] == "absolute" {
+		path = absolutePath
+	}
+
+	return path, err
 }
