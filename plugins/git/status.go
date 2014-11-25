@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/fholiveira/smartprompt/colors"
 	"github.com/libgit2/git2go"
 )
 
@@ -33,11 +34,11 @@ func (gitStatus GitStatus) repository() (*git.Repository, error) {
 
 func (plugin GitStatus) textifyChanges(changes *GitChanges) (string, string) {
 	if !changes.HasChanges() {
-		return "", "{GREEN:bold}"
+		return "", colors.Green.Bold()
 	}
 
 	if changes.ConflictedFilesCount() > 0 {
-		return "!" + fmt.Sprint(changes.ConflictedFilesCount()), "{RED:bold}"
+		return "!" + fmt.Sprint(changes.ConflictedFilesCount()), colors.Red.Bold()
 	}
 
 	prompt := fmt.Sprint(
@@ -46,14 +47,14 @@ func (plugin GitStatus) textifyChanges(changes *GitChanges) (string, string) {
 		changes.UntrackedFilesCount())
 
 	if changes.ModifiedFilesCount() > 0 {
-		return prompt, "{RED:bold}"
+		return prompt, colors.Red.Bold()
 	}
 
 	if changes.StagedFilesCount() > 0 {
-		return prompt, "{YELLOW:bold}"
+		return prompt, colors.Yellow.Bold()
 	}
 
-	return prompt, "{CYAN:bold}"
+	return prompt, colors.Cyan.Bold()
 }
 
 func (gitStatus GitStatus) IsApplicable() bool {
