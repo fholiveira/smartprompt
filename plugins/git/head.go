@@ -29,8 +29,7 @@ func (head GitHead) IsRebasing() bool {
 }
 
 func (head GitHead) IsMerging() bool {
-	reader := FileReader{}
-	exists, err := reader.Exists(head.workdir + "MERGE_HEAD")
+	exists, err := FileReader{}.Exists(head.workdir + "MERGE_HEAD")
 	if nil != err {
 		return false
 	}
@@ -41,11 +40,13 @@ func (head GitHead) IsMerging() bool {
 func (head GitHead) Name() (string, error) {
 	if head.IsRebasing() {
 		return head.rebasingBranchName()
-	} else if head.IsMerging() {
-		return head.mergingBranchName()
-	} else {
-		return head.branchName()
 	}
+
+	if head.IsMerging() {
+		return head.mergingBranchName()
+	}
+
+	return head.branchName()
 }
 
 func (head GitHead) branchName() (string, error) {
@@ -68,32 +69,33 @@ func (head GitHead) mergingBranchName() (string, error) {
 	if nil != err {
 		return "", err
 	}
+
 	return "merging " + name, nil
 }
 
 func (head GitHead) rebasingBranchName() (string, error) {
-	ref, err := head.tryGetRef(head.workdir + "rebase-apply/head-name")
+	reference, err := head.reference(head.workdir + "rebase-apply/head-name")
 	if nil != err {
 		return "", err
 	}
 
-	if nil == ref {
-		ref, err = head.tryGetRef(head.workdir + "rebase-merge/head-name")
+	if nil == reference {
+		reference, err = head.reference(head.workdir + "rebase-merge/head-name")
 		if nil != err {
 			return "", err
 		}
 	}
 
-	name, err := ref.Branch().Name()
+	name, err := reference.Branch().Name()
 	if nil != err {
 		return "", err
 	}
 
-	ref.Free()
+	reference.Free()
 	return "rebasing " + name, nil
 }
 
-func (head GitHead) tryGetRef(path string) (*git.Reference, error) {
+func (plugin GitHead) reference(path string) (*git.Reference, error) {
 	reader := FileReader{}
 
 	exists, err := reader.Exists(path)
@@ -105,10 +107,10 @@ func (head GitHead) tryGetRef(path string) (*git.Reference, error) {
 		return nil, nil
 	}
 
-	headId, err := reader.ReadFirstLine(path)
+	head, err := reader.ReadFirstLine(path)
 	if nil != err {
 		return nil, err
 	}
 
-	return head.repo.LookupReference(headId)
+	return plugin.repo.LookupReference(head)
 }

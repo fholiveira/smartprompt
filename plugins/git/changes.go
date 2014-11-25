@@ -12,13 +12,16 @@ type GitChanges struct {
 	untracked  int
 }
 
-func (changes GitChanges) Init(repo *git.Repository) *GitChanges {
+func (changes GitChanges) Init(repo *git.Repository) (*GitChanges, error) {
 	changes.workdir = repo.Workdir() + "/.git/"
 	changes.repo = repo
 
-	changes.countChanges()
+	err := changes.countChanges()
+	if nil != err {
+		return nil, err
+	}
 
-	return &changes
+	return &changes, nil
 }
 
 func (changes GitChanges) StagedFilesCount() int {
@@ -44,26 +47,42 @@ func (changes GitChanges) HasChanges() bool {
 		changes.conflicted > 0
 }
 
-func (changes *GitChanges) countChanges() {
+func (changes *GitChanges) checkForChanges(entry git.StatusEntry) {
+	if isStaged(entry.Status) && isModified(entry.Status) {
+		changes.conflicted++
+	} else if isModified(entry.Status) {
+		changes.modified++
+	} else if isStaged(entry.Status) {
+		changes.staged++
+	} else if isUntracked(entry.Status) {
+		changes.untracked++
+	}
+}
+
+func (changes *GitChanges) countChanges() error {
 	options := git.StatusOptions{}
 	options.Flags = git.StatusOptIncludeUntracked
 
-	status, _ := changes.repo.StatusList(&options)
-	entryCount, _ := status.EntryCount()
+	status, err := changes.repo.StatusList(&options)
+	if nil != err {
+		return err
+	}
+
+	entryCount, err := status.EntryCount()
+	if nil != err {
+		return err
+	}
 
 	for index := 0; index < entryCount; index++ {
-		entry, _ := status.ByIndex(index)
-
-		if isStaged(entry.Status) && isModified(entry.Status) {
-			changes.conflicted++
-		} else if isModified(entry.Status) {
-			changes.modified++
-		} else if isStaged(entry.Status) {
-			changes.staged++
-		} else if isUntracked(entry.Status) {
-			changes.untracked++
+		entry, err := status.ByIndex(index)
+		if nil != err {
+			return err
 		}
+
+		changes.checkForChanges(entry)
 	}
+
+	return nil
 }
 
 func isStaged(status git.Status) bool {

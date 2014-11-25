@@ -12,28 +12,48 @@ type GitStatus struct {
 	repo *git.Repository
 }
 
-func (gitStatus *GitStatus) repository() (*git.Repository, error) {
-	if nil != gitStatus.repo {
-		return gitStatus.repo, nil
-	}
-
-	workingDirectory, err := os.Getwd()
+func (gitStatus GitStatus) repository() (*git.Repository, error) {
+	currentDirectory, err := os.Getwd()
 	if nil != err {
 		return nil, err
 	}
 
-	workingDirectory, err = git.Discover(workingDirectory, false, nil)
+	repoDirectory, err := git.Discover(currentDirectory, false, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	repo, err := git.OpenRepository(workingDirectory)
+	repo, err := git.OpenRepository(repoDirectory)
 	if err != nil {
 		return nil, err
 	}
 
-	gitStatus.repo = repo
 	return repo, nil
+}
+
+func (plugin GitStatus) textifyChanges(changes *GitChanges) (string, string) {
+	if !changes.HasChanges() {
+		return "", "{GREEN:bold}"
+	}
+
+	if changes.ConflictedFilesCount() > 0 {
+		return "!" + fmt.Sprint(changes.ConflictedFilesCount()), "{RED:bold}"
+	}
+
+	prompt := fmt.Sprint(
+		changes.StagedFilesCount(),
+		changes.ModifiedFilesCount(),
+		changes.UntrackedFilesCount())
+
+	if changes.ModifiedFilesCount() > 0 {
+		return prompt, "{RED:bold}"
+	}
+
+	if changes.StagedFilesCount() > 0 {
+		return prompt, "{YELLOW:bold}"
+	}
+
+	return prompt, "{CYAN:bold}"
 }
 
 func (gitStatus GitStatus) IsApplicable() bool {
@@ -41,36 +61,22 @@ func (gitStatus GitStatus) IsApplicable() bool {
 	return nil != repo
 }
 
-func (gitStatus GitStatus) Prompt(parameters []string) (string, error) {
-	repo, err := gitStatus.repository()
+func (plugin GitStatus) Prompt(parameters []string) (string, error) {
+	repo, err := plugin.repository()
 	if nil != err {
 		return "", nil
 	}
-	color := "{GREEN:bold}"
 
-	head := GitHead{}.Init(repo)
-	prompt, _ := head.Name()
-
-	changes := GitChanges{}.Init(repo)
-	if changes.HasChanges() {
-		if changes.ConflictedFilesCount() > 0 {
-			prompt += " !" + fmt.Sprint(changes.ConflictedFilesCount())
-			color = "{RED:bold}"
-		} else {
-			prompt += " " + fmt.Sprint(changes.StagedFilesCount(), changes.ModifiedFilesCount(), changes.UntrackedFilesCount())
-
-			if changes.ModifiedFilesCount() > 0 {
-				color = "{RED:bold}"
-			} else if changes.StagedFilesCount() > 0 {
-				color = "{YELLOW:bold}"
-			} else if changes.UntrackedFilesCount() > 0 {
-				color = "{CYAN:bold}"
-			}
-		}
+	changes, err := GitChanges{}.Init(repo)
+	if nil != err {
+		return "", nil
 	}
+
+	name, err := GitHead{}.Init(repo).Name()
+	changesText, color := plugin.textifyChanges(changes)
+	prompt := strings.TrimSpace(name + " " + changesText)
 
 	repo.Free()
 
-	prompt = strings.TrimSpace(prompt)
 	return color + "[" + prompt + "]", nil
 }
