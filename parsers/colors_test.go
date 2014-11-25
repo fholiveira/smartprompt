@@ -14,21 +14,21 @@ func TestColorParserShouldParseColor(t *testing.T) {
 }
 
 func TestColorParserShouldParseColorUnderline(t *testing.T) {
-	prompt := PromptLine{"{user}@{BLUE|underline}{host}"}
+	prompt := PromptLine{"{user}@{BLUE:underline}{host}"}
 
 	parsedPrompt, _ := ColorParser{}.Parse(prompt)
 	assert.Equal(t, "{user}@\\[\\e[4;34m\\]{host}", parsedPrompt.Text)
 }
 
 func TestColorParserShouldParseColorBold(t *testing.T) {
-	prompt := PromptLine{"{user}@{CYAN|bold}{host}"}
+	prompt := PromptLine{"{user}@{CYAN:bold}{host}"}
 
 	parsedPrompt, _ := ColorParser{}.Parse(prompt)
 	assert.Equal(t, "{user}@\\[\\e[1;36m\\]{host}", parsedPrompt.Text)
 }
 
 func TestColorParserShouldParseColorBackground(t *testing.T) {
-	prompt := PromptLine{"{user}@{YELLOW|background}{host}"}
+	prompt := PromptLine{"{user}@{YELLOW:background}{host}"}
 
 	parsedPrompt, _ := ColorParser{}.Parse(prompt)
 	assert.Equal(t, "{user}@\\[\\e[33m\\]{host}", parsedPrompt.Text)

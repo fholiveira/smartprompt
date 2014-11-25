@@ -36,13 +36,13 @@ func (parser ColorParser) apply(color colors.Color, token Token) string {
 func (parser ColorParser) Parse(prompt PromptLine) (PromptLine, []error) {
 	colorsMap := parser.Colors()
 
-	for _, token := range prompt.Tokens() {
+	for _, token := range prompt.Tokens(":") {
 		color, isColor := colorsMap[token.Name()]
 		if isColor {
 			prompt.Apply(token, parser.apply(color, token))
 		}
 
-		if token.Name() == "TEXT:reset" {
+		if token.Name() == "TEXT" {
 			prompt.Apply(token, colors.TextReset)
 		}
 	}

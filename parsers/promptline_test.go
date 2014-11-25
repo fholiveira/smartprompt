@@ -8,19 +8,27 @@ import (
 
 func TestGetPromptLineTokens(t *testing.T) {
 	prompt := PromptLine{"{RED} {BLUE:bold}/{GREEN}"}
-	expectedTokens := []Token{Token("RED"), Token("BLUE:bold"), Token("GREEN")}
-	assert.Equal(t, prompt.Tokens(), expectedTokens)
+	expectedTokens := []Token{
+		NewToken("RED", ":"),
+		NewToken("BLUE:bold", ":"),
+		NewToken("GREEN", ":")}
+
+	assert.Equal(t, prompt.Tokens(":"), expectedTokens)
 }
 
 func TestGetPromptLineTokensWhenSomeTokensHaveParameters(t *testing.T) {
 	prompt := PromptLine{"{RED:bold} {time|mm/yy}/{GREEN}"}
-	expectedTokens := []Token{Token("RED:bold"), Token("time|mm/yy"), Token("GREEN")}
-	assert.Equal(t, prompt.Tokens(), expectedTokens)
+	expectedTokens := []Token{
+		NewToken("RED:bold", ":"),
+		NewToken("time|mm/yy", ":"),
+		NewToken("GREEN", ":")}
+
+	assert.Equal(t, prompt.Tokens(":"), expectedTokens)
 }
 
 func TestApplyTokenInPromptLine(t *testing.T) {
 	prompt := PromptLine{"{RED} {user}@{host}"}
-	token := Token("user")
+	token := NewToken("user", "|")
 
 	prompt.Apply(token, "username123")
 
@@ -29,7 +37,7 @@ func TestApplyTokenInPromptLine(t *testing.T) {
 
 func TestApplyTokeniWithParameterInPromptLine(t *testing.T) {
 	prompt := PromptLine{"{time|yy/mm} {user}@{host}"}
-	token := Token("time|yy/mm")
+	token := NewToken("time|yy/mm", "|")
 
 	prompt.Apply(token, "05/1992")
 
