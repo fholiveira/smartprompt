@@ -33,16 +33,30 @@ var Plugins = func() map[string]Plugin {
 	}
 }
 
-func (parser PluginParser) Parse(prompt PromptLine) (PromptLine, []error) {
-	plugins, errors := Plugins(), ErrorList{}.Init()
-	for _, token := range prompt.Tokens("|") {
+func validPlugins(tokens []Token) []InputMessage {
+	plugins, messages := Plugins(), make([]InputMessage, 0)
+
+	for _, token := range tokens {
 		plugin, isPlugin := plugins[token.Name()]
 		if isPlugin {
-			pluginPrompt, err := plugin.Prompt(token.Parameters())
-
-			errors.Append(err)
-			prompt.Apply(token, pluginPrompt)
+			messages = append(messages, InputMessage{plugin, token})
 		}
+	}
+
+	return messages
+}
+
+func (parser PluginParser) Parse(prompt PromptLine) (PromptLine, []error) {
+	errors, plugins := ErrorList{}.Init(), validPlugins(prompt.Tokens("|"))
+
+	results := ParallelMap(plugins, func(message InputMessage) OutputMessage {
+		result, err := message.plugin.Prompt(message.token.Parameters())
+		return OutputMessage{message.token, result, err}
+	})
+
+	for _, message := range results {
+		errors.Append(message.err)
+		prompt.Apply(message.token, message.result)
 	}
 
 	return PromptLine{prompt.Text}, errors.Items()

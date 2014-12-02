@@ -54,7 +54,7 @@ Usage:
   smartprompt --version
 
 Options:
-  --pattern=<pattern>    Prompt pattern [default: {GREEN|bold}{user}@{host} {BLUE|bold}{location:vimstyle} {sourcecontrol} {PURPLE|bold}{symbol} {TEXT:reset}].
+  --pattern=<pattern>    Prompt pattern [default: {GREEN:bold}{user}@{host} {BLUE:bold}{location:vimstyle} {sourcecontrol} {PURPLE:bold}{symbol} {TEXT:reset}].
   -d, --debug            Debug mode (print all errors in stdout).
   -h, --help             Show this screen.
   --version              Show version.`
