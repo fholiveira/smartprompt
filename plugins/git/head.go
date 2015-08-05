@@ -2,48 +2,72 @@ package git
 
 import "github.com/libgit2/git2go"
 
+type RepoState git.RepositoryState
+
+func (state RepoState) IsRebasing() bool {
+	repostate := git.RepositoryState(state)
+	return repostate == git.RepositoryStateRebaseInteractive
+}
+
+func (state RepoState) IsMerging() bool {
+	repostate := git.RepositoryState(state)
+	return repostate&git.RepositoryStateMerge > 0 ||
+		repostate&git.RepositoryStateRebaseMerge > 0
+}
+
+func (state RepoState) IsReverting() bool {
+	repostate := git.RepositoryState(state)
+	return repostate&git.RepositoryStateRevert > 0
+}
+
+func (state RepoState) IsCherrypicking() bool {
+	repostate := git.RepositoryState(state)
+	return repostate&git.RepositoryStateCherrypick > 0
+}
+
+func (state RepoState) IsBisecting() bool {
+	repostate := git.RepositoryState(state)
+	return repostate&git.RepositoryStateBisect > 0
+}
+
 type GitHead struct {
-	workdir string
-	repo    *git.Repository
+	repo *git.Repository
 }
 
 func (head GitHead) Init(repo *git.Repository) *GitHead {
-	head.workdir = repo.Workdir() + "/.git/"
 	head.repo = repo
 	return &head
 }
 
-func (head GitHead) IsRebasing() bool {
-	reader := FileReader{}
-	merge, err := reader.Exists(head.workdir + "rebase-merge")
+func (head GitHead) IsDetached() bool {
+	detached, err := head.repo.IsHeadDetached()
 	if nil != err {
 		return false
 	}
 
-	interactive, err := reader.Exists(head.workdir + "rebase-apply")
-	if nil != err {
-		return false
-	}
-
-	return merge || interactive
-}
-
-func (head GitHead) IsMerging() bool {
-	exists, err := FileReader{}.Exists(head.workdir + "MERGE_HEAD")
-	if nil != err {
-		return false
-	}
-
-	return exists
+	return detached
 }
 
 func (head GitHead) Name() (string, error) {
-	if head.IsRebasing() {
-		return head.rebasingBranchName()
+	state := RepoState(head.repo.State())
+
+	if state.IsRebasing() {
+		name, err := head.branchName()
+		return "rebasing " + name, err
 	}
 
-	if head.IsMerging() {
-		return head.mergingBranchName()
+	if state.IsMerging() {
+		name, err := head.branchName()
+		return "merging " + name, err
+	}
+
+	if head.IsDetached() {
+		reference, err := head.repo.Head()
+		if nil != err {
+			return "", err
+		}
+
+		return "detached at " + reference.Target().String()[0:7], nil
 	}
 
 	return head.branchName()
@@ -62,55 +86,4 @@ func (head GitHead) branchName() (string, error) {
 
 	reference.Free()
 	return name, nil
-}
-
-func (head GitHead) mergingBranchName() (string, error) {
-	name, err := head.branchName()
-	if nil != err {
-		return "", err
-	}
-
-	return "merging " + name, nil
-}
-
-func (head GitHead) rebasingBranchName() (string, error) {
-	reference, err := head.reference(head.workdir + "rebase-apply/head-name")
-	if nil != err {
-		return "", err
-	}
-
-	if nil == reference {
-		reference, err = head.reference(head.workdir + "rebase-merge/head-name")
-		if nil != err {
-			return "", err
-		}
-	}
-
-	name, err := reference.Branch().Name()
-	if nil != err {
-		return "", err
-	}
-
-	reference.Free()
-	return "rebasing " + name, nil
-}
-
-func (plugin GitHead) reference(path string) (*git.Reference, error) {
-	reader := FileReader{}
-
-	exists, err := reader.Exists(path)
-	if nil != err {
-		return nil, err
-	}
-
-	if !exists {
-		return nil, nil
-	}
-
-	head, err := reader.ReadFirstLine(path)
-	if nil != err {
-		return nil, err
-	}
-
-	return plugin.repo.LookupReference(head)
 }
