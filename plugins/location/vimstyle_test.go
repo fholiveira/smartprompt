@@ -17,9 +17,49 @@ func TestVimStyleLocationWhenCurrentDirIsRootDir(t *testing.T) {
 	}
 }
 
+func TestVimStyleAbsoluteLocationWithHiddenDir(t *testing.T) {
+	currentDirectory = func() (string, string, error) {
+		return "/home/username/docs/.math/papers", "~/docs/.math/papers", nil
+	}
+
+	location, err := VimStyle{}.Prompt([]string{"absolute"})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, "/h/u/d/.m/papers", location)
+	}
+}
+
+func TestVimStyleLocationWithHiddenDir(t *testing.T) {
+	currentDirectory = func() (string, string, error) {
+		return "/home/username/docs/.math/papers", "~/docs/.math/papers", nil
+	}
+
+	location, err := VimStyle{}.Prompt(nil)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, "~/d/.m/papers", location)
+	}
+}
+
+func TestVimStyleLocationWithHiddenSymbolicDir(t *testing.T) {
+	currentDirectory = func() (string, string, error) {
+		return "/home/username/docs/.math/papers", "~/docs/.math/papers", nil
+	}
+
+	isSymlink = func(path string) bool {
+		return path == "~/docs/.math"
+	}
+
+	location, err := VimStyle{}.Prompt(nil)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, "~/d/.m@/papers", location)
+	}
+}
+
 func TestVimStyleLocationWithSymlinks(t *testing.T) {
 	currentDirectory = func() (string, string, error) {
-		return "~/Documents/2014/papers", "~/docs/papers", nil
+		return "/home/username/Documents/2014/papers", "~/docs/papers", nil
 	}
 
 	location, err := VimStyle{}.Prompt(nil)
@@ -31,19 +71,21 @@ func TestVimStyleLocationWithSymlinks(t *testing.T) {
 
 func TestVimStyleAbsoluteLocation(t *testing.T) {
 	currentDirectory = func() (string, string, error) {
-		return "~/Documents/2014/papers", "~/papers", nil
+		return "/home/username/Documents/2014/papers",
+			"~/Documents/2014/papers",
+			nil
 	}
 
 	location, err := VimStyle{}.Prompt([]string{"absolute"})
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, "~/D/2/papers", location)
+		assert.Equal(t, "/h/u/D/2/papers", location)
 	}
 }
 
 func TestVimStyleLocationWhenCurrentDirIsHomeDir(t *testing.T) {
 	currentDirectory = func() (string, string, error) {
-		return "~", "~", nil
+		return "/home/username", "~", nil
 	}
 
 	location, err := VimStyle{}.Prompt(nil)
@@ -54,22 +96,24 @@ func TestVimStyleLocationWhenCurrentDirIsHomeDir(t *testing.T) {
 
 func TestVimStyleLocationWhenCurrentDirIsiChildOfRootDir(t *testing.T) {
 	currentDirectory = func() (string, string, error) {
-		return "/home/Documents/20140322/test", "/test", nil
+		return "/Documents/20140322/test", "/Documents/20140322/test", nil
 	}
 
 	location, err := VimStyle{}.Prompt([]string{"absolute"})
 	if assert.NoError(t, err) {
-		assert.Equal(t, "/h/D/2/test", location)
+		assert.Equal(t, "/D/2/test", location)
 	}
 }
 
 func TestVimStyleLocationWhenCurrentDirIsChildOfHomeDir(t *testing.T) {
 	currentDirectory = func() (string, string, error) {
-		return "~/Projects/golang/src/smartprompt", "~/smartprompt", nil
+		return "/home/username/Projects/golang/src/smartprompt",
+			"~/Projects/golang/src/smartprompt",
+			nil
 	}
 
 	location, err := VimStyle{}.Prompt([]string{"absolute"})
 	if assert.NoError(t, err) {
-		assert.Equal(t, "~/P/g/s/smartprompt", location)
+		assert.Equal(t, "/h/u/P/g/s/smartprompt", location)
 	}
 }

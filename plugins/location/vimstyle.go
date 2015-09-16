@@ -8,11 +8,17 @@ import (
 
 var homeDir, _ = homeDirectory()
 
-func firstChar(text string) string {
-	return string([]rune(text)[0])
+func shortDirName(text string) string {
+	var runes = []rune(text)
+
+	if string(runes[0]) == "." {
+		return string(runes[:2])
+	}
+
+	return string(runes[0])
 }
 
-func isSymlink(path string) bool {
+var isSymlink = func(path string) bool {
 	fileInfo, err := os.Lstat(strings.Replace(path, "~", homeDir, 1))
 	if nil != err {
 		return false
@@ -41,7 +47,7 @@ func (plugin VimStyle) applyStyle(path string, symlinks bool) string {
 	}
 
 	normalPath, vimPath := "", ""
-	if firstChar(path) == "/" {
+	if shortDirName(path) == "/" {
 		normalPath, vimPath = "/", "/"
 	}
 
@@ -49,7 +55,7 @@ func (plugin VimStyle) applyStyle(path string, symlinks bool) string {
 	for _, directory := range basePath {
 		normalPath = gopath.Join(normalPath, directory)
 
-		alias := firstChar(directory)
+		alias := shortDirName(directory)
 		if symlinks && isSymlink(normalPath) {
 			alias += "@"
 		}
